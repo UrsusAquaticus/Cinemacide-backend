@@ -72,7 +72,7 @@ const signup = async (req, res, next) => {
 				userId: createdUser.id,
 				email: createdUser.email,
 			},
-			process.env.jwt_key,
+			process.env.JWT_KEY,
 			{ expiresIn: "1h" }
 		);
 	} catch (err) {
@@ -121,7 +121,7 @@ const login = async (req, res, next) => {
 				userId: existingUser.id,
 				email: existingUser.email,
 			},
-			process.env.jwt_key,
+			process.env.JWT_KEY,
 			{ expiresIn: "1h" }
 		);
 	} catch (err) {
