@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const reviewsRoutes = require("./routes/reviews-routes");
 const usersRoutes = require("./routes/users-routes");
 const moviesRoutes = require("./routes/movies-routes");
+const collectionsRoutes = require("./routes/collections-routes");
 const HttpError = require("./models/http-error");
 
 const app = express();
