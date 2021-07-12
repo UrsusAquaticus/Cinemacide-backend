@@ -56,6 +56,7 @@ const signup = async (req, res, next) => {
 			"https://c1.scryfall.com/file/scryfall-cards/normal/front/1/6/16185c50-f7b8-4cea-a129-dfad8e9df781.jpg?1591605108",
 		password: hashedPassword,
 		reviews: [],
+		hoards: [],
 	});
 
 	try {

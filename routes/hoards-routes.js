@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get("/", hoardsControllers.getHoards);
 
-router.get("/:cid", hoardsControllers.getHoardById);
+router.get("/:hid", hoardsControllers.getHoardById);
 
 router.get("/user/:uid", hoardsControllers.getHoardsByUserId);
 
@@ -20,21 +20,19 @@ router.use(checkAuth);
 router.post(
 	"/",
 	[
-		check("imdbID").not().isEmpty(),
 		check("title").not().isEmpty(),
-		check("rating").not().isEmpty(),
-		check("comment").isLength({ min: 10 }),
 		check("creator").not().isEmpty(),
+		check("public").toBoolean(),
 	],
 	hoardsControllers.createHoard
 );
 
 router.patch(
-	"/:cid",
-	[check("rating").not().isEmpty(), check("comment").isLength({ min: 10 })],
+	"/:hid",
+	[check("public").toBoolean()],
 	hoardsControllers.updateHoard
 );
 
-router.delete("/:cid", hoardsControllers.deleteHoard);
+router.delete("/:hid", hoardsControllers.deleteHoard);
 
 module.exports = router;

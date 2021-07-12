@@ -10,6 +10,7 @@ const hoardSchema = new Schema({
 	creator: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
 	public: { type: Boolean, required: true },
 	sharedUsers: [{ type: mongoose.Types.ObjectId, required: true, ref: "User" }],
+	reviews: [{ type: mongoose.Types.ObjectId, required: true, ref: "Review" }],
 });
 
 module.exports = mongoose.model("Hoard", hoardSchema);

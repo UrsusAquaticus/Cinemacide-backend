@@ -89,7 +89,7 @@ const createReview = async (req, res, next) => {
 		);
 	}
 
-	const { imdbID, title, poster, rating, comment } = req.body;
+	const { imdbID, title, poster, rating, comment, hoard } = req.body;
 
 	const creator = req.userData.userId;
 
@@ -116,6 +116,7 @@ const createReview = async (req, res, next) => {
 		createDate: new Date(),
 		lastUpdateDate: new Date(),
 		creator,
+		hoard
 	});
 
 	try {

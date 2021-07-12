@@ -89,7 +89,7 @@ const createHoard = async (req, res, next) => {
 		);
 	}
 
-	const { imdbID, title, poster, rating, comment } = req.body;
+	const { title, public } = req.body;
 
 	const creator = req.userData.userId;
 
@@ -107,15 +107,14 @@ const createHoard = async (req, res, next) => {
 	}
 
 	const createdHoard = new Hoard({
-		imdbID,
 		title,
-		poster,
-		rating,
-		comment,
 		username: user.name,
 		createDate: new Date(),
 		lastUpdateDate: new Date(),
 		creator,
+		public,
+		sharedUsers: [],
+		reviews: [],
 	});
 
 	try {
