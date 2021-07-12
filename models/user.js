@@ -9,6 +9,7 @@ const userSchema = new Schema({
 	password: { type: String, required: true, minlength: 7 },
 	image: { type: String, required: true },
 	reviews: [{ type: mongoose.Types.ObjectId, required: true, ref: "Review" }],
+	collections: [{ type: mongoose.Types.ObjectId, required: true, ref: "Collection" }],
 });
 
 userSchema.plugin(uniqueValidator);
