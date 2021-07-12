@@ -12,7 +12,7 @@ const reviewSchema = new Schema({
 	createDate: { type: Date, required: true },
 	lastUpdateDate: { type: Date, required: true },
 	creator: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
-	collection: { type: mongoose.Types.ObjectId, required: true, ref: "Collection" },
+	hoard: { type: mongoose.Types.ObjectId, required: true, ref: "Hoard" },
 });
 
 module.exports = mongoose.model("Review", reviewSchema);

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const collectionSchema = new Schema({
+const hoardSchema = new Schema({
 	title: { type: String, required: true },
 	username: { type: String, required: true },
 	createDate: { type: Date, required: true },
@@ -12,4 +12,4 @@ const collectionSchema = new Schema({
 	sharedUsers: [{ type: mongoose.Types.ObjectId, required: true, ref: "User" }],
 });
 
-module.exports = mongoose.model("Collection", collectionSchema);
+module.exports = mongoose.model("Hoard", hoardSchema);
