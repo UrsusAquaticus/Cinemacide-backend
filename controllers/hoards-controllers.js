@@ -113,6 +113,7 @@ const createHoard = async (req, res, next) => {
 		lastUpdateDate: new Date(),
 		creator,
 		public,
+		sharedUsers: [],
 		reviews: [],
 	});
 
