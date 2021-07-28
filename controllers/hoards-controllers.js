@@ -172,7 +172,7 @@ const updateHoard = async (req, res, next) => {
 };
 
 const deleteHoard = async (req, res, next) => {
-	const hoardId = req.params.rid;
+	const hoardId = req.params.hid;
 	let hoard;
 	try {
 		hoard = await Hoard.findById(hoardId).populate("creator");

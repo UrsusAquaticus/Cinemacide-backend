@@ -89,7 +89,7 @@ const createReview = async (req, res, next) => {
 		);
 	}
 
-	const { imdbID, title, poster, rating, comment, hoard } = req.body;
+	const { imdbID, title, poster, rating, comment, public, hoard } = req.body;
 
 	const creator = req.userData.userId;
 
@@ -116,8 +116,11 @@ const createReview = async (req, res, next) => {
 		createDate: new Date(),
 		lastUpdateDate: new Date(),
 		creator,
-		hoard
+		public,
+		hoard,
 	});
+
+	console.log(createdReview);
 
 	try {
 		const sess = await mongoose.startSession();

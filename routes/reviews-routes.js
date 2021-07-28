@@ -22,16 +22,12 @@ router.post(
 	[
 		check("imdbID").not().isEmpty(),
 		check("title").not().isEmpty(),
-		check("rating").not().isEmpty(),
-		check("comment").isLength({ min: 10 }),
-		check("creator").not().isEmpty(),
 	],
 	reviewsControllers.createReview
 );
 
 router.patch(
 	"/:rid",
-	[check("rating").not().isEmpty(), check("comment").isLength({ min: 10 })],
 	reviewsControllers.updateReview
 );
 

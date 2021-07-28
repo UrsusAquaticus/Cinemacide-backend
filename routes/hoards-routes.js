@@ -21,7 +21,6 @@ router.post(
 	"/",
 	[
 		check("title").not().isEmpty(),
-		check("creator").not().isEmpty(),
 		check("public").toBoolean(),
 	],
 	hoardsControllers.createHoard
