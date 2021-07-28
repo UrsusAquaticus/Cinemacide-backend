@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const HttpError = require("../models/http-error");
 const Review = require("../models/review");
 const User = require("../models/user");
+const Hoard = require("../models/hoard");
 
 const getReviews = async (req, res, next) => {
 	let reviews;
@@ -37,6 +38,27 @@ const getReviewById = async (req, res, next) => {
 	res.json({ review: review.toObject({ getters: true }) });
 };
 
+const getReviewsByIds = async (req, res, next) => {
+	const reviewIds = req.params[0].split("/");
+
+	let reviews;
+	try {
+		reviews = await Review.find().where("_id").in(reviewIds);
+	} catch (err) {
+		const error = new HttpError(err, 500);
+		return next(error);
+	}
+
+	if (!reviews) {
+		const error = new HttpError("Could not find review", 404);
+		return next(error);
+	}
+
+	res.json({
+		reviews: reviews.map((review) => review.toObject({ getters: true })),
+	});
+};
+
 const getReviewsByUserId = async (req, res, next) => {
 	const userId = req.params.uid;
 
@@ -55,6 +77,29 @@ const getReviewsByUserId = async (req, res, next) => {
 
 	res.json({
 		reviews: userWithReviews.reviews.map((review) =>
+			review.toObject({ getters: true })
+		),
+	});
+};
+
+const getReviewsByHoardId = async (req, res, next) => {
+	const hoardId = req.params.hid;
+	console.log(hoardId);
+	let hoardWithReviews;
+	try {
+		hoardWithReviews = await Hoard.findById(hoardId).populate("reviews");
+	} catch (err) {
+		const error = new HttpError(err, 500);
+		return next(error);
+	}
+
+	if (!hoardWithReviews || hoardWithReviews.length === 0) {
+		const error = new HttpError("Could not find reviews for user ID", 404);
+		return next(error);
+	}
+
+	res.json({
+		reviews: hoardWithReviews.reviews.map((review) =>
 			review.toObject({ getters: true })
 		),
 	});
@@ -97,12 +142,25 @@ const createReview = async (req, res, next) => {
 	try {
 		user = await User.findById(creator);
 	} catch (err) {
-		const error = new HttpError(err, 500);
+		const error = new HttpError("User:" + err, 500);
 		return next(error);
 	}
 
 	if (!user) {
 		const error = new HttpError("could not find user id", 500);
+		return next(error);
+	}
+
+	let hoardObj;
+	try {
+		hoardObj = await Hoard.findById(hoard);
+	} catch (err) {
+		const error = new HttpError("User:" + err, 500);
+		return next(error);
+	}
+
+	if (!hoardObj) {
+		const error = new HttpError("could not find hoard id", 500);
 		return next(error);
 	}
 
@@ -127,7 +185,9 @@ const createReview = async (req, res, next) => {
 		sess.startTransaction();
 		await createdReview.save({ session: sess });
 		user.reviews.push(createdReview);
+		hoardObj.reviews.push(createdReview);
 		await user.save({ session: sess });
+		await hoardObj.save({ session: sess });
 		await sess.commitTransaction();
 	} catch (err) {
 		const error = new HttpError(err, 500);
@@ -214,7 +274,10 @@ const deleteReview = async (req, res, next) => {
 exports.getReviews = getReviews;
 exports.getReviewById = getReviewById;
 exports.getReviewsByUserId = getReviewsByUserId;
+exports.getReviewsByIds = getReviewsByIds;
 exports.getReviewsByMovieId = getReviewsByMovieId;
+exports.getReviewsByHoardId = getReviewsByHoardId;
+
 exports.createReview = createReview;
 exports.updateReview = updateReview;
 exports.deleteReview = deleteReview;

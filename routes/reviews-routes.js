@@ -14,22 +14,20 @@ router.get("/user/:uid", reviewsControllers.getReviewsByUserId);
 
 router.get("/movie/:mid", reviewsControllers.getReviewsByMovieId);
 
+router.get("/hoard/:hid", reviewsControllers.getReviewsByHoardId);
+
+router.get("/multi/*", reviewsControllers.getReviewsByIds);
+
 //Protected below
 router.use(checkAuth);
 
 router.post(
 	"/",
-	[
-		check("imdbID").not().isEmpty(),
-		check("title").not().isEmpty(),
-	],
+	[check("imdbID").not().isEmpty(), check("title").not().isEmpty()],
 	reviewsControllers.createReview
 );
 
-router.patch(
-	"/:rid",
-	reviewsControllers.updateReview
-);
+router.patch("/:rid", reviewsControllers.updateReview);
 
 router.delete("/:rid", reviewsControllers.deleteReview);
 
