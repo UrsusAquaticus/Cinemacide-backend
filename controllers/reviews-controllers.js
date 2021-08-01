@@ -84,7 +84,6 @@ const getReviewsByUserId = async (req, res, next) => {
 
 const getReviewsByHoardId = async (req, res, next) => {
 	const hoardId = req.params.hid;
-	console.log(hoardId);
 	let hoardWithReviews;
 	try {
 		hoardWithReviews = await Hoard.findById(hoardId).populate("reviews");

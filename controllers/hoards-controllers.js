@@ -118,8 +118,6 @@ const createHoard = async (req, res, next) => {
 		reviews: [],
 	});
 
-	console.log(createdHoard);
-
 	try {
 		const sess = await mongoose.startSession();
 		sess.startTransaction();
