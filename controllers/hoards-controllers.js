@@ -130,7 +130,9 @@ const createHoard = async (req, res, next) => {
 		return next(error);
 	}
 
-	res.status(201).json({ hoard: createdHoard });
+	res.status(201).json({
+		hoard: createdHoard.toObject({ getters: true }),
+	});
 };
 
 const updateHoard = async (req, res, next) => {
@@ -176,7 +178,9 @@ const deleteHoard = async (req, res, next) => {
 	const hoardId = req.params.hid;
 	let hoard;
 	try {
-		hoard = await Hoard.findById(hoardId).populate("creator");
+		hoard = await Hoard.findById(hoardId)
+			.populate("creator")
+			.populate("reviews");
 	} catch (err) {
 		const error = new HttpError(err, 500);
 		return next(error);
@@ -195,9 +199,11 @@ const deleteHoard = async (req, res, next) => {
 	try {
 		const sess = await mongoose.startSession();
 		sess.startTransaction();
-		await hoard.remove({ session: sess });
+		await hoard.deleteOne({ session: sess });
 		hoard.creator.hoards.pull(hoard);
 		await hoard.creator.save({ session: sess });
+		await Review.deleteMany({ _id: { $in: hoard.reviews } });
+
 		await sess.commitTransaction();
 	} catch (err) {
 		const error = new HttpError(err, 500);

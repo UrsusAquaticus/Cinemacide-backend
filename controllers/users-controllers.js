@@ -123,7 +123,7 @@ const login = async (req, res, next) => {
 				email: existingUser.email,
 			},
 			process.env.JWT_KEY,
-			{ expiresIn: "1h" }
+			{ expiresIn: "24h" }
 		);
 	} catch (err) {
 		const error = new HttpError("Login failed", 500);

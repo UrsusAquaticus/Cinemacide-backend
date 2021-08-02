@@ -177,8 +177,6 @@ const createReview = async (req, res, next) => {
 		hoard,
 	});
 
-	console.log(createdReview);
-
 	try {
 		const sess = await mongoose.startSession();
 		sess.startTransaction();
@@ -239,7 +237,9 @@ const deleteReview = async (req, res, next) => {
 	const reviewId = req.params.rid;
 	let review;
 	try {
-		review = await Review.findById(reviewId).populate("creator");
+		review = await Review.findById(reviewId)
+			.populate("creator")
+			.populate("hoard");
 	} catch (err) {
 		const error = new HttpError(err, 500);
 		return next(error);
@@ -258,9 +258,13 @@ const deleteReview = async (req, res, next) => {
 	try {
 		const sess = await mongoose.startSession();
 		sess.startTransaction();
-		await review.remove({ session: sess });
+		await review.deleteOne({ session: sess });
 		review.creator.reviews.pull(review);
 		await review.creator.save({ session: sess });
+		if (review.hoard) {
+			review.hoard.reviews.pull(review);
+			await review.hoard.save({ session: sess });
+		}
 		await sess.commitTransaction();
 	} catch (err) {
 		const error = new HttpError(err, 500);
