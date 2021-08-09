@@ -35,6 +35,12 @@ const signup = async (req, res, next) => {
 		const error = new HttpError(err, 500);
 		return next(error);
 	}
+	try {
+		existingUser = await User.findOne({ name: name });
+	} catch (err) {
+		const error = new HttpError(err, 500);
+		return next(error);
+	}
 
 	if (existingUser) {
 		const error = new HttpError("User exists", 422);
@@ -52,8 +58,7 @@ const signup = async (req, res, next) => {
 	const createdUser = new User({
 		name,
 		email,
-		image:
-			"https://c1.scryfall.com/file/scryfall-cards/normal/front/1/6/16185c50-f7b8-4cea-a129-dfad8e9df781.jpg?1591605108",
+		image: "",
 		password: hashedPassword,
 		reviews: [],
 		hoards: [],
@@ -74,16 +79,19 @@ const signup = async (req, res, next) => {
 				email: createdUser.email,
 			},
 			process.env.JWT_KEY,
-			{ expiresIn: "1h" }
+			{ expiresIn: "24h" }
 		);
 	} catch (err) {
 		const error = new HttpError("Signup failed", 500);
 		return next(error);
 	}
 
-	res
-		.status(201)
-		.json({ userId: createdUser.id, email: createdUser.email, token: token });
+	res.status(201).json({
+		userId: createdUser.id,
+		name: createdUser.name,
+		image: createdUser.image,
+		token: token,
+	});
 };
 
 const login = async (req, res, next) => {
@@ -133,7 +141,8 @@ const login = async (req, res, next) => {
 	res.json({
 		message: "Logged in!",
 		userId: existingUser.id,
-		email: existingUser.email,
+		name: existingUser.name,
+		image: existingUser.image,
 		token: token,
 	});
 };
