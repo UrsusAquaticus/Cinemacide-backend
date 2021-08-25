@@ -15,13 +15,13 @@ module.exports = (req, res, next) => {
         apiCount = apiCount + 1 || 1;
         console.log("API Request: #" + apiCount);
 
-        expDate = expDate || new Date().getTime() + 1000;
+        expDate = expDate || new Date().getTime() + 1000 * 60;
 
         const remainingTime = new Date(expDate).getTime() - new Date().getTime();
         if (remainingTime <= 0) {
             console.log("Api Count Refreshed");
             apiCount = 0;
-            expDate = new Date().getTime() + 1000;
+            expDate = new Date().getTime() + 1000 * 60;
         }
 
         dumpStats({ apiCount, expDate });
