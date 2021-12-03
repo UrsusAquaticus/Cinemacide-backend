@@ -1,2 +1,3 @@
 # Cinemacide-backend
-[Frontend Repo](https://github.com/UrsusAquaticus/Cinemacide-frontend)
+* [Website](https://cinemacide-mern.web.app/)
+* [Frontend Repo](https://github.com/UrsusAquaticus/Cinemacide-frontend)
